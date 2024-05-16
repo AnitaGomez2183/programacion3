@@ -17,7 +17,7 @@ body {
 }
 
 .container.is-fullheight {
-  height: calc(100vh - 142px); /* Altura total menos la altura del hero */
+  height: calc(100vh - 166px); /* Altura total menos la altura del hero */
 }
 
 .columns.is-fullheight {
@@ -46,4 +46,38 @@ body {
   padding: 10px;
   background-color: #f5f5f5; /* Color de fondo para diferenciar el input */
   border-top: 1px solid #ddd; /* Borde superior para separar del contenido del chat */
+}
+
+#chat-input .field.has-addons .control {
+  margin-bottom: 0;
+}
+
+#chat-input .field.has-addons .input {
+  border-radius: 0;
+}
+
+#chat-input .field.has-addons .button {
+  border-radius: 0;
+}
+
+.button.is-small.is-marginless {
+  /* Elimina el margen inferior de los botones del header */
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.75rem;
+}
+
+.users-list {
+  margin-top: 20px;
+}
+
+.user-card {
+  margin-bottom: 5px;
+}
+
+.user-card .card-content {
+  padding: 10px;
+}
+
+.user-card .title {
+  margin: 0;
 }

@@ -45,18 +45,16 @@
     </div>
     <div id="chat-input">
         <form action="{{ url_for('main.send_message', channel_id=channel.channel_id) }}" method="post">
-            <div class="field">
-                <div class="control">
+            <div class="field has-addons">
+                <div class="control is-expanded">
                     <input class="input" type="text" name="message" placeholder="Escribe tu mensaje...">
                 </div>
-            </div>
-            <div class="field">
                 <div class="control">
                     <button class="button is-primary" type="submit">Enviar</button>
                 </div>
             </div>
         </form>
-    </div>
+    </div>    
 </div>
 {% endblock %}
 
@@ -65,10 +63,14 @@
     <p class="menu-label">
         Usuarios Matriculados
     </p>
-    <ul class="menu-list">
+    <div class="users-list">
         {% for user in users %}
-        <li>{{ user.username }}</li>
+        <div class="card user-card">
+            <div class="card-content">
+                <p class="subtitle is-6">{{ user.username }}</p>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </aside>
 {% endblock %}
