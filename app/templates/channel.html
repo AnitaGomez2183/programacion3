@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block servers %}
+<aside class="menu">
+    <p class="menu-label">Servers</p>
+    <ul class="menu-list">
+        {% for server in servers %}
+        <li><a href="{{ url_for('main.server', server_id=server.server_id) }}">{{ server.name }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endblock %}
+
+{% block channels %}
+<aside class="menu">
+    <p class="menu-label">{{ server.name }}</p>
+    <ul class="menu-list">
+        {% for channel in channels %}
+        <li><a href="{{ url_for('main.channel', channel_id=channel.channel_id) }}">{{ channel.name }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endblock %}
+
+{% block chat %}
+<section class="section">
+    <div class="content">
+        <h2 class="title">{{ channel.name }}</h2>
+        {% for message_date, messages in messages_grouped_by_day.items() %}
+            <div class="message-group">
+                <h3 class="subtitle">{{ message_date }}</h3>
+                <ul>
+                    {% for message in messages %}
+                    <li>
+                        <article class="message is-small">
+                            <div class="message-header">
+                                <p>{{ message.username }}</p>
+                                <small>{{ message.creation_date }}</small>
+                            </div>
+                            <div class="message-body">
+                                {{ message.content }}
+                            </div>
+                        </article>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

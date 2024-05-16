@@ -1,0 +1,65 @@
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# Archivos de configuración de entorno
+*.env
+
+# Archivos y directorios de la base de datos de SQLite
+*.db
+*.sqlite3
+
+# Archivos de compilación de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Directorios de migración de bases de datos
+migrations/
+
+# Archivos de log
+*.log
+
+# Archivos de configuración de PyCharm
+.idea/
+
+# Archivos de configuración de Visual Studio Code
+.vscode/
+
+# Archivos y directorios de Jupyter Notebook
+.ipynb_checkpoints/
+
+# Archivos de caché de Jupyter
+*.ipynb_cache
+
+# Archivos y directorios temporales
+tmp/
+temp/
+
+# Archivos de seguridad
+*.pem
+*.key
+
+# Archivos de configuración del sistema
+*.bak
+*.swp
+*.swo
+
+# Archivos de configuración de aplicaciones
+*.pid
+
+# Otros archivos y directorios generados
+*.tmp
+*.backup
+*.bak
+*.orig
+*.save
+*.log
+*.swp
+*.swo
+*.thumbsdb
+*.tmb
+*.DS_Store
+
+!.env.example

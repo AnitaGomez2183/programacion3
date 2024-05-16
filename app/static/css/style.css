@@ -1,0 +1,13 @@
+/* Personaliza estilos aquí si es necesario */
+.message-group {
+  margin-bottom: 20px;
+}
+
+.message-group ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.message-group li {
+  margin-bottom: 10px;
+}
