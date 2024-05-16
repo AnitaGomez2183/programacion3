@@ -2,7 +2,9 @@
 
 {% block servers %}
 <aside class="menu">
-    <p class="menu-label">Servers</p>
+    <p class="menu-label">
+        Servidores
+    </p>
     <ul class="menu-list">
         {% for server in servers %}
         <li><a href="{{ url_for('main.server', server_id=server.server_id) }}">{{ server.name }}</a></li>
@@ -13,7 +15,9 @@
 
 {% block channels %}
 <aside class="menu">
-    <p class="menu-label">{{ server.name }}</p>
+    <p class="menu-label">
+        Canales
+    </p>
     <ul class="menu-list">
         {% for channel in channels %}
         <li><a href="{{ url_for('main.channel', channel_id=channel.channel_id) }}">{{ channel.name }}</a></li>
@@ -22,4 +26,15 @@
 </aside>
 {% endblock %}
 
-{% block chat %}{% endblock %}
+{% block users %}
+<aside class="menu">
+    <p class="menu-label">
+        Usuarios Matriculados
+    </p>
+    <ul class="menu-list">
+        {% for user in users %}
+        <li>{{ user.username }}</li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endblock %}
