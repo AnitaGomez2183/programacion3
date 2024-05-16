@@ -11,13 +11,31 @@
     <header>
         <section class="hero is-dark">
             <div class="hero-body">
-                <div class="container">
+                <div class="container is-flex is-justify-content-space-between is-align-items-center">
                     <h1 class="title">TeamHub</h1>
+                    <div class="buttons">
+                        {% if current_user.is_authenticated %}
+                            <span class="tag is-light">Logged in as {{ current_user.username }}</span>
+                            <a href="{{ url_for('auth.logout') }}" class="button is-light is-small is-marginless ml-2">Logout</a>
+                        {% else %}
+                            <a href="{{ url_for('auth.login') }}" class="button is-light is-small is-marginless ml-2">Login</a>
+                            <a href="{{ url_for('auth.register') }}" class="button is-light is-small is-marginless ml-2">Register</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </section>
     </header>
     <div class="container is-fullheight">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="notification is-danger">
+                    {% for category, message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         <div class="columns is-fullheight">
             <div class="column is-2" id="servers">
                 {% block servers %}{% endblock %}

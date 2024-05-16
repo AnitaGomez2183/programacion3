@@ -31,10 +31,14 @@
     <p class="menu-label">
         Usuarios Matriculados
     </p>
-    <ul class="menu-list">
+    <div class="users-list">
         {% for user in users %}
-        <li>{{ user.username }}</li>
+        <div class="card user-card">
+            <div class="card-content">
+                <p class="subtitle is-6">{{ user.username }}</p>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </aside>
 {% endblock %}

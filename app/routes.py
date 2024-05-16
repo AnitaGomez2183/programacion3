@@ -3,6 +3,7 @@ from sqlalchemy import text
 from .models import Server, Channel, User, Message
 from app import db
 from flask import request, redirect, url_for
+from flask_login import login_required, current_user
 
 main = Blueprint('main', __name__)
 
@@ -87,9 +88,10 @@ def get_users(server_id):
     return users
 
 @main.route('/send_message/<int:channel_id>', methods=['POST'])
+@login_required
 def send_message(channel_id):
-    content = request.form['message']  # Asegúrate de que el nombre del campo coincida con el formulario
-    user_id = 1  # Este sería el ID del usuario que envía el mensaje; en una app real, se obtendría del contexto del usuario logueado
+    content = request.form['message']
+    user_id = current_user.get_id()  # Obtener el ID del usuario logueado
 
     # Llamar al procedimiento almacenado
     query = text("CALL send_message(:p_content, :p_user_id, :p_channel_id)")

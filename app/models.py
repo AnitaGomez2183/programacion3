@@ -40,3 +40,12 @@ class MessageByDay(db.Model):
     content = db.Column(db.Text)
     creation_date = db.Column(db.DateTime)
     username = db.Column(db.String(50))
+
+from flask_login import UserMixin
+
+class User(UserMixin):
+    def __init__(self, user_id, username, email, password):
+        self.id = user_id
+        self.username = username
+        self.email = email
+        self.password = password
