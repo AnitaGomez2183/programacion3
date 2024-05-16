@@ -17,16 +17,19 @@
             </div>
         </section>
     </header>
-    <div class="container mt-4">
-        <div class="columns">
-            <div class="column is-one-quarter" id="servers">
+    <div class="container is-fullheight">
+        <div class="columns is-fullheight">
+            <div class="column is-2" id="servers">
                 {% block servers %}{% endblock %}
             </div>
-            <div class="column is-one-quarter" id="channels">
+            <div class="column is-2" id="channels">
                 {% block channels %}{% endblock %}
             </div>
-            <div class="column" id="chat">
+            <div class="column is-6" id="chat">
                 {% block chat %}{% endblock %}
+            </div>
+            <div class="column is-2" id="users">
+                {% block users %}{% endblock %}
             </div>
         </div>
     </div>

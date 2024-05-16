@@ -2,7 +2,9 @@
 
 {% block servers %}
 <aside class="menu">
-    <p class="menu-label">Servers</p>
+    <p class="menu-label">
+        Servidores
+    </p>
     <ul class="menu-list">
         {% for server in servers %}
         <li><a href="{{ url_for('main.server', server_id=server.server_id) }}">{{ server.name }}</a></li>
