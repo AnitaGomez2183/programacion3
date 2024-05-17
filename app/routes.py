@@ -33,6 +33,8 @@ def server(server_id):
 def channel(channel_id):
     channel = get_channel(channel_id)
     messages_grouped_by_day = get_messages_grouped_by_day(channel_id)
+    polls = get_polls(channel_id)
+    combined = merge_messages_and_polls(messages_grouped_by_day, polls)
     servers = get_servers()
     channels = get_channels(channel.server_id)
     users = get_users(channel.server_id)
@@ -41,7 +43,7 @@ def channel(channel_id):
         servers=servers,
         channels=channels,
         channel=channel,
-        messages_grouped_by_day=messages_grouped_by_day,
+        combined=combined,
         users=users,
         show_columns=True,
     )
@@ -143,3 +145,72 @@ def create_poll_in_channel(channel_id, question, options, event_date):
         },
     )
     db.session.commit()
+
+
+def get_polls(channel_id):
+    query = text("SELECT * FROM view_polls WHERE channel_id = :channel_id")
+    result = db.session.execute(query, {"channel_id": channel_id})
+    rows = result.fetchall()
+
+    # Extraer las encuestas y sus opciones
+    polls = {}
+    for row in rows:
+        poll_id = row.poll_id
+        if poll_id not in polls:
+            polls[poll_id] = {
+                "type": "poll",
+                "poll_id": poll_id,
+                "question": row.question,
+                "start_date": row.start_date,
+                "end_date": row.end_date,
+                "options": [],
+            }
+        polls[poll_id]["options"].append(
+            {"option_id": row.option_id, "option_text": row.option_text}
+        )
+
+    return list(polls.values())
+
+
+def merge_messages_and_polls(messages_grouped_by_day, polls):
+    combined = []
+
+    # Convert messages_grouped_by_day a una lista de diccionarios
+    for message_date, messages in messages_grouped_by_day.items():
+        for message in messages:
+            combined.append(
+                {
+                    "type": "message",
+                    "id": message.message_id,
+                    "username": message.username,
+                    "content": message.content,
+                    "creation_date": message.creation_date,
+                }
+            )
+
+    # Agregar encuestas a la lista combinada
+    for poll in polls:
+        combined.append(poll)
+
+    # Ordenar la lista combinada por creation_date/start_date
+    combined.sort(
+        key=lambda x: x["creation_date"] if x["type"] == "message" else x["start_date"]
+    )
+
+    from collections import defaultdict
+
+    grouped_combined = defaultdict(list)
+    for item in combined:
+        item_date = (
+            item["creation_date"].date()
+            if item["type"] == "message"
+            else item["start_date"].date()
+        )
+        grouped_combined[item_date].append(item)
+
+    # Convertir el diccionario agrupado en una lista de diccionarios
+    grouped_combined = [
+        {"date": date, "elements": items} for date, items in grouped_combined.items()
+    ]
+
+    return grouped_combined

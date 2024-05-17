@@ -34,15 +34,31 @@
     </div>
     <div id="chat-messages">
         <div>
-            {% for message_date, messages in messages_grouped_by_day.items() %}
-            <div class="message-group">
-                <div class="date-separator">{{ message_date }}</div>
-                <ul>
-                    {% for message in messages %}
-                    <li><strong>{{ message.username }}:</strong> {{ message.content }} <em>({{ message.creation_date }})</em></li>
-                    {% endfor %}
-                </ul>
-            </div>
+            {% for group in combined %}
+                <div class="date-separator">{{ group.date }}</div>
+                {% for item in group.elements %}
+                    {% if item.type == 'message' %}
+                        <div class="message-group">
+                            <ul>
+                                <li><strong>{{ item.username }}:</strong> {{ item.content }} <em>({{ item.creation_date }})</em></li>
+                            </ul>
+                        </div>
+                    {% elif item.type == 'poll' %}
+                        <div class="poll-item box">
+                            <h4 class="title is-5">{{ item.question }}</h4>
+                            <div class="field">
+                                {% for option in item.options %}
+                                    <div class="control">
+                                        <label class="radio">
+                                            <input type="radio" name="poll_{{ item.poll_id }}" value="{{ option.option_id }}">
+                                            {{ option.option_text }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         </div>
     </div>
