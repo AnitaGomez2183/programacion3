@@ -1,11 +1,35 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required
 from .models import User
-from . import db
-from werkzeug.security import generate_password_hash, check_password_hash
+from . import db, login_manager
+
+# from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import text
 
 auth = Blueprint("auth", __name__)
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    flash("Debes iniciar sesión para acceder a esta página.", "warning")
+    return redirect(url_for("auth.login"))
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    stmt = text(
+        "SELECT user_id, username, email FROM view_users WHERE user_id = :user_id"
+    )
+    result = db.session.execute(stmt, {"user_id": user_id}).fetchone()
+
+    if result:
+        return User(
+            user_id=result[0],
+            username=result[1],
+            email=result[2],
+            password=None,
+        )
+    return None
 
 
 @auth.route("/login", methods=["GET", "POST"])

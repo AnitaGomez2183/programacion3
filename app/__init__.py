@@ -24,23 +24,4 @@ def create_app():
 
         app.register_blueprint(main_blueprint)
 
-        from sqlalchemy import text
-        from .models import User
-
-        @login_manager.user_loader
-        def load_user(user_id):
-            stmt = text(
-                "SELECT user_id, username, email FROM view_users WHERE user_id = :user_id"
-            )
-            result = db.session.execute(stmt, {"user_id": user_id}).fetchone()
-
-            if result:
-                return User(
-                    user_id=result[0],
-                    username=result[1],
-                    email=result[2],
-                    password=None,
-                )
-            return None
-
     return app
