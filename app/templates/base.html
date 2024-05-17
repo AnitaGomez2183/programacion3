@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <!-- Bulma CSS framework -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>TeamHub</title>
 </head>
@@ -12,14 +16,21 @@
         <section class="hero is-dark">
             <div class="hero-body">
                 <div class="container is-flex is-justify-content-space-between is-align-items-center">
-                    <h1 class="title">TeamHub</h1>
+                    <a href="{{ url_for('main.index') }}">
+                        <h1 class="title has-text-primary">TeamHub</h1>
+                    </a>
                     <div class="buttons">
                         {% if current_user.is_authenticated %}
-                            <span class="tag is-light">Logged in as {{ current_user.username }}</span>
-                            <a href="{{ url_for('auth.logout') }}" class="button is-light is-small is-marginless ml-2">Logout</a>
+                            <span class="tag is-light">
+                                Conectado como: 
+                                <span class="tag is-light has-text-info">
+                                    {{ current_user.username }}
+                                </span>
+                            </span>
+                            <a href="{{ url_for('auth.logout') }}" class="button is-light is-small is-marginless ml-2">Cerrar sesión</a>
                         {% else %}
-                            <a href="{{ url_for('auth.login') }}" class="button is-light is-small is-marginless ml-2">Login</a>
-                            <a href="{{ url_for('auth.register') }}" class="button is-light is-small is-marginless ml-2">Register</a>
+                            <a href="{{ url_for('auth.login') }}" class="button is-light is-small is-marginless ml-2">Iniciar sesión</a>
+                            <a href="{{ url_for('auth.register') }}" class="button is-light is-small is-marginless ml-2">Registrarse</a>
                         {% endif %}
                     </div>
                 </div>
@@ -36,6 +47,7 @@
                 </div>
             {% endif %}
         {% endwith %}
+        {% if show_columns %}
         <div class="columns is-fullheight">
             <div class="column is-2" id="servers">
                 {% block servers %}{% endblock %}
@@ -50,6 +62,14 @@
                 {% block users %}{% endblock %}
             </div>
         </div>
+        {% else %}
+        <div class="columns is-centered is-fullheight">
+            <div class="column is-half" id="single-column">
+                {% block auth %}{% endblock %}
+            </div>
+        </div>
+        {% endif %}
     </div>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 </body>
 </html>
