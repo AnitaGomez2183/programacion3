@@ -37,6 +37,7 @@ TeamHub es una aplicación web de mensajería similar a Discord, desarrollada co
     ```bash
     FLASK_APP=run.py
     FLASK_ENV=development
+    FLASK_DEBUG=1
     SECRET_KEY=your_secret_key_here
     DB_USER=your_db_user_here
     DB_PASS=your_db_password_here

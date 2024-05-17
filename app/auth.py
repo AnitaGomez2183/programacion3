@@ -5,62 +5,76 @@ from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import text
 
-auth = Blueprint('auth', __name__)
+auth = Blueprint("auth", __name__)
 
-@auth.route('/login', methods=['GET', 'POST'])
+
+@auth.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
 
         # Llamada al procedimiento almacenado authenticate_user
-        stmt = text("""
+        stmt = text(
+            """
             CALL authenticate_user(:p_email, :p_password, @p_user_id, @p_username);
-        """)
-        db.session.execute(stmt, {'p_email': email, 'p_password': password})
+        """
+        )
+        db.session.execute(stmt, {"p_email": email, "p_password": password})
 
         # Consulta para obtener los valores de salida
-        output = db.session.execute(text("SELECT @p_user_id AS p_user_id, @p_username AS p_username")).fetchone()
+        output = db.session.execute(
+            text("SELECT @p_user_id AS p_user_id, @p_username AS p_username")
+        ).fetchone()
         user_id = output[0]
         username = output[1]
 
         if user_id and user_id > 0:
-            user = User(user_id=user_id, username=username, email=email, password=password)
+            user = User(
+                user_id=user_id, username=username, email=email, password=password
+            )
             login_user(user)
-            return redirect(url_for('main.index'))
-        
-        flash('Invalid email or password', 'danger')
-        return redirect(url_for('auth.login'))
-    return render_template('login.html')
+            return redirect(url_for("main.index"))
 
-@auth.route('/logout')
+        flash(
+            "Email o contraseña incorrectos. Por favor, inténtelo de nuevo.", "danger"
+        )
+        return redirect(url_for("auth.login"))
+    return render_template("login.html", show_columns=False)
+
+
+@auth.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for("main.index"))
 
-@auth.route('/register', methods=['GET', 'POST'])
+
+@auth.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
+    if request.method == "POST":
+        username = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
 
         # Llamada al procedimiento almacenado register_user
-        stmt = text("""
+        stmt = text(
+            """
             CALL register_user(:p_username, :p_email, :p_password, @p_user_id);
-        """)
-        db.session.execute(stmt, {'p_username': username, 'p_email': email, 'p_password': password})
+        """
+        )
+        db.session.execute(
+            stmt, {"p_username": username, "p_email": email, "p_password": password}
+        )
 
         # Consulta para obtener el valor de salida
         output = db.session.execute(text("SELECT @p_user_id")).fetchone()
         user_id = output[0]  # Acceder por índice
 
         if user_id and user_id > 0:
-            flash('Registration successful! Please log in.', 'success')
-            return redirect(url_for('auth.login'))
+            flash("Cuenta creada con éxito. Por favor, inicie sesión.", "success")
+            return redirect(url_for("auth.login"))
         else:
-            flash('Registration failed. Please try again.', 'danger')
-            return redirect(url_for('auth.register'))
-    return render_template('register.html')
-
+            flash("Error al crear la cuenta. Por favor, inténtelo de nuevo.", "danger")
+            return redirect(url_for("auth.register"))
+    return render_template("register.html", show_columns=False)
