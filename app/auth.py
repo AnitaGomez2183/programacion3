@@ -31,7 +31,7 @@ def login():
         
         flash('Invalid email or password', 'danger')
         return redirect(url_for('auth.login'))
-    return render_template('login.html')
+    return render_template('login.html',show_columns=False)
 
 @auth.route('/logout')
 @login_required
@@ -62,5 +62,4 @@ def register():
         else:
             flash('Registration failed. Please try again.', 'danger')
             return redirect(url_for('auth.register'))
-    return render_template('register.html')
-
+    return render_template('register.html',show_columns=False)
